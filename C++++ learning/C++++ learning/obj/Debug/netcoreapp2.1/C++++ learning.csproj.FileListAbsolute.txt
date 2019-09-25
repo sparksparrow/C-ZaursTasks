@@ -1,0 +1,11 @@
+D:\C++ projects\C++++ learning\C++++ learning\bin\Debug\netcoreapp2.1\C++++ learning.deps.json
+D:\C++ projects\C++++ learning\C++++ learning\bin\Debug\netcoreapp2.1\C++++ learning.runtimeconfig.json
+D:\C++ projects\C++++ learning\C++++ learning\bin\Debug\netcoreapp2.1\C++++ learning.runtimeconfig.dev.json
+D:\C++ projects\C++++ learning\C++++ learning\bin\Debug\netcoreapp2.1\C++++ learning.dll
+D:\C++ projects\C++++ learning\C++++ learning\bin\Debug\netcoreapp2.1\C++++ learning.pdb
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.csprojAssemblyReference.cache
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.csproj.CoreCompileInputs.cache
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.AssemblyInfoInputs.cache
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.AssemblyInfo.cs
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.dll
+D:\C++ projects\C++++ learning\C++++ learning\obj\Debug\netcoreapp2.1\C++++ learning.pdb
