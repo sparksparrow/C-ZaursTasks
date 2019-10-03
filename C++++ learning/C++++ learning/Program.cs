@@ -1,147 +1,21 @@
-﻿using System;   //консольный ввод-вывод
-
+﻿#define DEBUG_ACCOUNT
+using System;   //консольный ввод-вывод
 using System.Text;   //для stringbuilder
 using System.IO;   //потоки
-using System.Collections.Generic;
+//using System.Collections.Generic; //для массива классов Queue
+//using System.Collections; // для хеш-таблицы
 
 namespace C_____learning
-
 {
-    enum Type { Sber, Cur};
-       class Bank : BankTransaction
-    {
-        static Queue <BankTransaction> arr = new Queue<BankTransaction>();
-        int number;
-        int balance;
-        Type tip;
-        static int i = 0;
-        public Bank() //только номер
-        {
-            puls();
-            number = i;
-           
-        }
-        public Bank(int bal) // номер и баланс
-        {
-            puls();
-            number = i;
-            this.balance = bal;
-           
-        }
-        public Bank(Type t) //номер и тип счета
-        {
-            puls();
-            number = i;
-            this.tip = t;
-            
-        }
-        void puls()
-        {
-            i++;
-        }  //метод для уникального номера
-        public void set(int i, int j)
-        {
-            this.number = i;
-            this.balance = j;
-        }
-        public  int getN()
-        {
-            return this.number;
-        }
-        public  int getB()
-        {
-            return this.balance;
-        }
-        public Type getT()
-        {
-            return this.tip; 
-        }
-        public void show()
-        {
-            Console.WriteLine("Номер: {0} Баланс: {1} Тип: {2}",getN(),getB(),getT());        
-        }
-        public void withdraw(int dig)
-        {
-            if (dig <= this.balance)
-            {
-                this.balance -= dig;
-                BankTransaction i = new BankTransaction(-dig);
-                arr.Enqueue(i);
-            }
-            else
-                Console.WriteLine("Средств не хватает!");
-        } //снять деньги
-        public void replenish(int dig)
-        {            
-                this.balance += dig;
-            BankTransaction i = new BankTransaction(dig);
-            arr.Enqueue(i);
-        } //пополнить баланс
-        public void transfer(ref Bank i, int dig)//перевод денег (i - с какого счета снимаем) ( dig - количество денег)
-        {
-            
-            if (i.balance >= dig)
-            {
-                i.balance -= dig;
-                this.balance += dig;
-            }
-            else
-                Console.WriteLine("Недостаточно стредств");
-            }
-        public void  showtransfers()
-        {            
-            foreach(BankTransaction k in arr)
-            {                
-                Console.WriteLine($"Дата {k.Getd()} : {k.Gets()} рублей.");
-            }
-        }
-
-        public void Dispose()
-        {
-            string file_name = "Переводы.txt";
-            var Writer = new StreamWriter(file_name);
-            foreach (BankTransaction k in arr)
-            {
-                Writer.Write($"Дата {k.Getd()} : {k.Gets()} рублей.\n");
-            }
-            Console.WriteLine($"Выполнино! Запись сделана в файл \"{file_name}\"");
-            Writer.Close();
-           // GC.SuppressFinalize(this);
-        }
-    } //лаба 7 + 8.1  + 9
-
-    
-     class BankTransaction
-    {
-         readonly DateTime date;
-         readonly int sum;
-       protected  BankTransaction()
-        { }
-        public DateTime Getd()
-        {
-            return this.date;
-        }
-
-        public int Gets()
-        {
-            return this.sum;
-        }
-        public BankTransaction(int sum1)
-        {            
-           this.date = DateTime.Now;
-            this.sum = sum1;
-        }
-        
-    }
     
     class Program
     {
         static string reverse(string rev)
         {
             StringBuilder revbuilder = new StringBuilder(rev);
-            for (int i = 0, k = rev.Length - 1; i <  rev.Length / 2; i++, k--)
+            for (int i = 0, k = rev.Length - 1; i < rev.Length / 2; i++, k--)
             {
-               char a = revbuilder[i];
+                char a = revbuilder[i];
                 revbuilder[i] = revbuilder[k];
                 revbuilder[k] = a;
             }
@@ -151,97 +25,132 @@ namespace C_____learning
         {
             return i is IFormattable;
         }
+
+        delegate string deel(string s);
         static void Main(string[] args)
         {
-            {
-                
+            {/*
+                Func<string, string> delreverse;  //У Action второе значение передается как второй аргумент функции
+                delreverse = reverse;
+                delreverse += reverse;//вернет значение последнего делегата (ничего не изменилось)
+                string str = Console.ReadLine();
+                Console.WriteLine(delreverse(str));
+                deel check = reverse;
+                Console.WriteLine(check.Invoke("Привет"));
+            */}//Делегаты
+            {  /*   
                 Bank bank = new Bank();
-                Console.WriteLine("{0} аккаунт: ", bank.getN());
-                bank.show();
+                bank.Name = "Никита";
+                Console.WriteLine("{0} аккаунт: ", bank.Nubmer);
+                Console.WriteLine(bank.ToString());
 
-                Bank bank1 = new Bank(Type.Cur);
-                Console.WriteLine("{0} аккаунт: ", bank1.getN());
-                bank1.show();
+                Bank bank1 = new Bank(Tip.Cur);
+                bank1.Name = "Андрей";
+                Console.WriteLine("{0} аккаунт: ", bank1.Nubmer);
+                Console.WriteLine(bank1.ToString());               
 
-                
                 byte switcher = 1;
                 while (switcher != 0)
                 {
                     try
-                    {
-                        Console.WriteLine($"\n{0} - Выход\n{1} - посмотреть счета\n{2} - снять деньги\n{3} - пополнить баланс\n{4} - Перевести средства на другой счет\n{5} - Показать перевод средств\n{6} - Сохранить историю переводов в файл");
+                    {                        
+                        Console.WriteLine($"\n{0} - Выход\n{1} - Посмотреть счета\n{2} - Снять деньги\n{3} - Пополнить баланс\n{4} - Перевести средства на другой счет\n{5} - Показать перевод средств\n{6} - Сохранить историю переводов в файл\n{7} - Найти транзакцию по ее номеру\n{8} - Определен ли DEBUG_ACCOUNT");
                         switcher = Convert.ToByte(Console.ReadLine());
 
                         switch (switcher)
                         {
                             case 1:
-                                bank.show();
-                                bank1.show();
+                                Console.Clear();
+                                Console.WriteLine(bank.ToString());
+                                Console.WriteLine(bank1.ToString());
                                 break;
 
                             case 2:
+                                Console.Clear();
                                 Console.WriteLine("Введите номер счет: ");
                                 int num = Convert.ToInt32(Console.ReadLine());
                                 Console.WriteLine("Введите снимаемое количество денег: ");
                                 int money = Convert.ToInt32(Console.ReadLine());
-                                if (num == bank.getN())
+                                if (num == bank.Nubmer)
                                     bank.withdraw(money);
                                 else
-                                    if (num == bank1.getN())
+                                    if (num == bank1.Nubmer)
                                     bank1.withdraw(money);
                                 else
                                     Console.WriteLine("Нет такого счета");
                                 break;
 
                             case 3:
+                                Console.Clear();
                                 Console.WriteLine("Введите номер счет: ");
                                 int num1 = Convert.ToInt32(Console.ReadLine());
                                 Console.WriteLine("Введите количество на зачисление: ");
                                 int money1 = Convert.ToInt32(Console.ReadLine());
-                                if (num1 == bank.getN())
+                                if (num1 == bank.Nubmer)
                                     bank.replenish(money1);
                                 else
-                                    if (num1 == bank1.getN())
+                                    if (num1 == bank1.Nubmer)
                                     bank1.replenish(money1);
                                 else
                                     Console.WriteLine("Нет такого счета");
                                 break;
 
                             case 4:
+                                Console.Clear();
                                 Console.WriteLine("Введите номер счет (для пополнения): ");
                                 int num2 = Convert.ToInt32(Console.ReadLine());
                                 Console.WriteLine("Введите номер счет (откуда будут списаны деньги): ");
                                 int num3 = Convert.ToInt32(Console.ReadLine());
                                 Console.WriteLine("Введите количество на перевод: ");
                                 int money2 = Convert.ToInt32(Console.ReadLine());
-                                if (num2 == bank.getN() && num3 == bank1.getN())
+                                if (num2 == bank.Nubmer && num3 == bank1.Nubmer)
                                     bank.transfer(ref bank1, money2);
                                 else
-                                    if (num2 == bank1.getN() && num3 == bank.getN())
-                                    bank1.transfer(ref bank, money2);
+                                    if (num2 == bank1.Nubmer && num3 == bank.Nubmer)
+                                     bank1.transfer(ref bank, money2);
                                 else
                                     Console.WriteLine("Нет такого счета");
                                 break;
+
                             case 5:
+                                Console.Clear();
                                 bank.showtransfers();
                                 break;
+
                             case 6:
+                                Console.Clear();
                                 bank.Dispose();
+                                break;
+                            case 7:
+                                Console.Clear();
+                                Console.WriteLine("Введите номер транзакции: ");
+                                int digit = Convert.ToInt32(Console.ReadLine()) - 1;
+                                if(bank[digit]==null)
+                                    Console.WriteLine("Нет такой транзакции.");
+                                else
+                                    Console.WriteLine($"Дата {bank[digit].Datetime} : {bank[digit].Sum} рублей.");
+                                break;
+                            case 8:
+                                Console.Clear();
+                                bank.DumpToScreen();
                                 break;
                         }
                     }
                     catch (FormatException)
                     {
+                        Console.Clear();
                         Console.WriteLine("Данные не введены!");
                     }
-                }
+                }                
+            
+            */
             }    // лаба 7 + 8.1 + класс Bank  + 9.1                                                                                    
             {/*
                 string str = Console.ReadLine();
                 Console.WriteLine(reverse(str));
             */
             }   //лаба 8.2 + функция reverse
-            { /*              
+            { /*             
                 Console.WriteLine("Введите название файла: (text.txt)");
                 string file_name = Console.ReadLine();
                 if (File.Exists(file_name))
@@ -263,17 +172,146 @@ namespace C_____learning
             {/*
                 object i = new Bank();
                 Console.WriteLine(checkformat(i));
-            */ }   //лаба 8.4                               
+            */
+            }   //лаба 8.4                               
+            {/*
+                ACipher acode = new ACipher();
 
+                string first = Console.ReadLine();
+                string enc = acode.encode(first);
+                Console.WriteLine(enc);
+                Console.WriteLine(acode.decode(enc));
+            */
+            } //Acipher
+            {/*
+                BCypher bcode = new BCypher();
 
-
-
-
-
-
-
-            Console.ReadKey();
-            //Console.WriteLine($"write {3} {23}.");
+                string first = Console.ReadLine();
+                string enc = bcode.encode(first);
+                Console.WriteLine(enc);
+                Console.WriteLine(bcode.decode(enc));
+                */
+            } //Bcipher //лаба 10.1
+            { /*
+            Factory factory = new Factory();
+            byte switcher= 1;                
+                    while (switcher != 0)
+                {
+                    try
+                    {                        
+                        Console.WriteLine($"\n{0} - Выход\n{1} - Создать аккаунт\n{2} - Удалить аккаунт\n{3} - Посмотреть аккаунты\n");
+                       
+                        switcher = Convert.ToByte(Console.ReadLine());
+                        switch (switcher)
+                        {
+                            case 1:
+                                System.Console.Clear();
+                                Console.WriteLine("Аккаунт {0} создан.", factory.CreateAccount());                                
+                                break;
+                            case 2:
+                                System.Console.Clear();
+                                Console.WriteLine("Введите номер счета для удаления: ");
+                               int num = Convert.ToInt32(Console.ReadLine());
+                                factory.Remove(num);
+                                break;
+                            case 3:
+                                System.Console.Clear();
+                                factory.Print();
+                                break;
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Данные не введены!");
+                    }
+            }
+            */
+            }//лаба 11.1
+            {/*
+                BankTransaction ba = new BankTransaction(1);
+                Bank bank = new Bank();
+                Bank bank1 = new Bank();
+                Console.WriteLine(bank.GetHashCode());
+                Console.WriteLine(bank.ToString());
+                Console.WriteLine(bank1==bank);
+                Console.WriteLine(bank1!=bank);
+                Console.WriteLine(bank.Equals(bank1));
+                Console.WriteLine(bank.Equals(ba));
+            */
+            }//лаба 12.1
+            {/*
+                RationalNumbers r = new RationalNumbers(1,2);
+                RationalNumbers r1 = new RationalNumbers(1, 3);                
+                Console.WriteLine(r.ToString());
+                Console.WriteLine(r1.ToString());
+                Console.WriteLine(r.Equals(r1));
+                Console.WriteLine(r==r1);
+                Console.WriteLine(r!=r1);
+                Console.WriteLine(r>r1);
+                Console.WriteLine(r < r1);
+                Console.WriteLine(r >= r1);
+                Console.WriteLine(r <= r1);
+                Console.WriteLine(r + r1);
+                Console.WriteLine(r - r1);
+                Console.WriteLine(r++);
+                Console.WriteLine(r--);
+            */
+            }//лаба 12.2 
+            {/*
+                Type t = typeof(RationalNumbers);
+                object[] arrayAtt = t.GetCustomAttributes(false);
+                foreach (AttributeInfoAttribute attrbt in arrayAtt)
+                {
+                    Console.WriteLine($"Имя создателя: {attrbt.name}.\nДата: {attrbt.date_creation}.");
+                }
+            */
+            }//лаба 14.2           
+            Console.ReadKey();            
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+//class A
+//{
+
+//}
+//p class B
+//{
+//    private A _a;
+//    public B(A a) Объект А живет где-то отдельно
+//    {
+//        _a = a;
+//    }
+//}
+
+//class B
+//{
+//    private A _a = new A();// Объект А существует только вместе с B
+//}
+
+//string str = "asd";
+//char[] a = str.ToCharArray();
+
+
+//class Account<T>    T - универсальный параметр
+//{
+//    public T Id { get; set; }
+//    public int Sum { get; set; }
+//}
+
+//Account<int> account1 = new Account<int> { Sum = 5000 };
+//Account<string> account2 = new Account<string> { Sum = 4000 };
+//account1.Id = 2;        // упаковка не нужна
+//account2.Id = "4356";
+//int id1 = account1.Id;  // распаковка не нужна
+//string id2 = account2.Id;
